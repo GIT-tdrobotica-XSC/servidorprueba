@@ -9,7 +9,7 @@ set -euxo pipefail                      # se detiene ante cualquier error (y mue
 exec > /var/log/bootstrap.log 2>&1      # guarda todo en un log para depurar
 
 # ---- Variables: lo único que hay que editar ----
-DOMAIN="miapp.de5.net"                  # dominio gratis de DNSHE (cambiar por el que registres)
+DOMAIN="demomateria.us.ci"              # dominio gratis de DNSHE (cambiar por el que registres)
 REPO="https://github.com/GIT-tdrobotica-XSC/servidorprueba.git"
 EMAIL="git@tdrobotica.co"               # para avisos de vencimiento del certificado SSL
 APP_USER="deploy"                       # usuario normal que correrá la app
