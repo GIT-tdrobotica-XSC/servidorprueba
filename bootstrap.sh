@@ -29,6 +29,8 @@ export NEXT_TELEMETRY_DISABLED=1
 # POR QUÉ: los parches de seguridad cierran vulnerabilidades conocidas.
 apt-get update -y && apt-get upgrade -y
 apt-get install -y nginx git curl ufw fail2ban unattended-upgrades certbot python3-certbot-nginx
+# libatomic1: librería que necesita el binario de pnpm 11 (Ubuntu mínimo no la trae).
+apt-get install -y libatomic1
 
 # ---- 2. Usuario con sudo (no usar root) ----
 # POR QUÉ: si la app es hackeada, el atacante solo tiene los permisos de "deploy".
