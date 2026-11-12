@@ -85,7 +85,8 @@ EOF
 ln -sf /etc/nginx/sites-available/lab /etc/nginx/sites-enabled/lab
 rm -f /etc/nginx/sites-enabled/default
 nginx -t
-systemctl reload nginx
+systemctl enable nginx
+systemctl restart nginx
 
 # ---- 7. Respaldo diario (cron, guarda 7 días) ----
 cat > /etc/cron.daily/lab-backup <<'EOF'
@@ -98,7 +99,9 @@ EOF
 chmod +x /etc/cron.daily/lab-backup
 
 # ---- 8. Montar la app COMO USUARIO deploy ----
-sudo -iu "$APP_USER" bash -c \
-  "git clone $REPO servidorprueba && bash servidorprueba/2-deploy.sh"
+if [ ! -d /home/$APP_USER/servidorprueba ]; then
+  sudo -iu "$APP_USER" git clone "$REPO" servidorprueba
+fi
+sudo -iu "$APP_USER" bash servidorprueba/2-deploy.sh
 
 echo "LISTO: abre http://$(curl -s https://checkip.amazonaws.com)"
