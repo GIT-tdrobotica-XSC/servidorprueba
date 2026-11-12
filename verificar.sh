@@ -18,6 +18,7 @@ check "Existe 'deploy'" id deploy
 check "'deploy' tiene sudo" bash -c "id -nG deploy | grep -qw sudo"
 
 echo "== 3. Seguridad"
+mkdir -p /run/sshd   # sshd -T la necesita para mostrar la config efectiva
 check "SSH: root bloqueado" bash -c "sshd -T | grep -qx 'permitrootlogin no'"
 check "SSH: sin contraseñas" bash -c "sshd -T | grep -qx 'passwordauthentication no'"
 check "fail2ban activo" systemctl is-active fail2ban
