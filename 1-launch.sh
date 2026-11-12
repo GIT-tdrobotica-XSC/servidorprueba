@@ -19,12 +19,15 @@ export NEEDRESTART_MODE=a               # reinicia servicios sin preguntar
 
 # ---- 1. Swap de 2 GB (memoria de emergencia en disco) ----
 # Compilar Next.js gasta mucha RAM; sin swap el servidor se cuelga.
-if [ ! -f /swapfile ]; then
+if ! swapon --show | grep -q /swapfile; then
   fallocate -l 2G /swapfile
   chmod 600 /swapfile
   mkswap /swapfile
-  swapon /swapfile
-  echo '/swapfile none swap sw 0 0' >> /etc/fstab
+  if swapon /swapfile; then
+    grep -q /swapfile /etc/fstab || echo '/swapfile none swap sw 0 0' >> /etc/fstab
+  else
+    echo "AVISO: no se pudo activar swap; sigo sin él."
+  fi
 fi
 
 # ---- 2. Actualizaciones + paquetes base ----
