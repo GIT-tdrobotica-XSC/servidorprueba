@@ -11,6 +11,7 @@
 # =====================================================================
 set -euxo pipefail
 exec > >(tee -a /var/log/lab.log) 2>&1
+export HOME="${HOME:-/root}"   # cloud-init no lo define y git/npm lo piden
 
 REPO="${REPO:-https://github.com/GIT-tdrobotica-XSC/servidorprueba}"
 APP_USER="deploy"

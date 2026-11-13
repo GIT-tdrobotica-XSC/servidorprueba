@@ -25,10 +25,14 @@ usando **código guardado en GitHub**. Si se daña, se crea otro igual en 10 min
 
 ## Montaje (orden exacto)
 1. **Lightsail → Create instance** → Linux/Unix → *OS Only* → **Ubuntu 24.04 LTS** → plan **2 GB**.
-2. **Add launch script**: abre en el navegador
-   <https://raw.githubusercontent.com/GIT-tdrobotica-XSC/servidorprueba/master/1-launch.sh>,
-   `Ctrl+A`, `Ctrl+C` y pégalo **completo** en la caja. *(Copiar desde el navegador, no desde
-   la terminal: la terminal parte las líneas largas y rompe el script.)*
+2. **Add launch script**: pega estas **2 líneas** en la caja:
+   ```
+   git clone https://github.com/GIT-tdrobotica-XSC/servidorprueba /opt/lab
+   bash /opt/lab/1-launch.sh
+   ```
+   *(Lightsail mete lo que pegas dentro de su propio script `#!/bin/sh`, y en Ubuntu `sh` es
+   `dash`, que no entiende `pipefail`. Por eso el launch script es solo un "lanzador" de
+   2 líneas compatibles con `sh`; el script real corre con `bash` y vive en GitHub.)*
 3. **Create instance**. Mientras arranca:
    - Networking → **Create static IP** → asociarla a la instancia.
    - Firewall IPv4: **SSH 22, HTTP 80, HTTPS 443** (el 443 hay que añadirlo).
@@ -85,7 +89,8 @@ curl -I localhost:3000                               # la app por dentro
 ## Problemas vistos durante la preparación
 | Problema | Causa | Solución |
 |---|---|---|
-| El script no corrió / se rompió al pegarlo | Copiado desde la terminal, que parte líneas largas | Copiar desde GitHub *raw* en el navegador |
+| El script no corrió / se rompió al pegarlo | Copiado desde la terminal, que parte líneas largas | Launch script corto (2 líneas) |
+| `set: Illegal option -o pipefail` en cloud-init | Lightsail ejecuta lo pegado con `sh` (dash), no con `bash` | El launch script solo clona y llama a `bash 1-launch.sh` |
 | Fallaba todo con `apt-get: not found` | Instancia creada con **Amazon Linux** | Usar **Ubuntu 24.04** |
 | `libatomic.so.1: cannot open shared object` | pnpm 11 necesita esa librería | `libatomic1` en el paso 2 |
 | Servidor muy lento al compilar | Sin swap, se agota la RAM | Paso 1: swap |
